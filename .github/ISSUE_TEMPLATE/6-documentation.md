@@ -1,5 +1,5 @@
 ---
-name: ドキュメント
+name: ドキュメント記載チケット
 about: ドキュメントを書く・直す
 title: "[ドキュメント] "
 labels: documentation

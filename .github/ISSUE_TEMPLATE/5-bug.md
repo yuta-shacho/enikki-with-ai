@@ -1,5 +1,5 @@
 ---
-name: バグ
+name: バグチケット
 about: 不具合を報告する
 title: "[バグ] "
 labels: bug
