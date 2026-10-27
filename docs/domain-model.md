@@ -52,4 +52,4 @@
 
 ## ドメインモデル図
 
-![ドメインモデル図](domain-model.excalidraw.svg)
+![ドメインモデル図](diagrams/domain-model.excalidraw.svg)
