@@ -50,7 +50,8 @@
 
 ### 不変条件
 
-- D1 と R2 を読み書きするのは `src/server/` だけにし、必ず利用者で絞る
+- D1 と R2 を読み書きするのは `src/server/adapter/` だけにし、必ず利用者で絞る
+- `src/server/domain/` は `usecase/`、`adapter/`、`db/schema.ts`、Drizzle を import しない。D1 から読んだ値は `adapter/` で schema に通してからドメインの型にする
 - API に届く値は、CLI が送ったものでもすべて確かめる
 - API を変えるときは、古い CLI からの提出も受け付ける。利用者のマシンには古い CLI が残るためだ
 - マイグレーションは後方互換にする。デプロイではマイグレーションが新しいコードより先に当たり、失敗しても戻らないためだ
@@ -68,6 +69,9 @@ Web と CLI は同じリポジトリに置き、pnpm の workspace でまとめ�
 │   ├── routes/images/    絵を返すルート
 │   ├── src/components/   画面の部品
 │   ├── src/server/       処理とルール
+│   │   ├── domain/       ドメインの型と、状態を変える関数
+│   │   ├── usecase/      提出やハンコを押すときの処理の手順
+│   │   └── adapter/      D1 と R2 の読み書きの実装
 │   ├── db/schema.ts      D1 の表
 │   ├── db/migrations/    マイグレーション（void db generate が作る）
 │   └── void.config.ts    void とログインの設定
@@ -78,6 +82,12 @@ Web と CLI は同じリポジトリに置き、pnpm の workspace でまとめ�
 ├── pnpm-workspace.yaml   workspace の設定（web と cli）
 └── package.json
 ```
+
+`src/server/` の中は 関数型ドメインモデルの層ごとに分けるディレクトリ構成とする
+
+- `domain/`: 絵日記、ハンコ、API キー、消費トークン量の型と、状態を変える関数を置く。D1 と R2 は読み書きしない。「その日の絵日記を読む」「絵日記を保存する」のような読み書きの型（resolver と store）もここに置き、実装は `adapter/` に置く
+- `usecase/`: 読み書きの型を通して値を読み、`domain/` の関数に渡し、返ってきた状態を保存する。画面の `.server.ts`、画像のルート、API はここを呼ぶ
+- `adapter/`: `domain/` の読み書きの型を D1 と R2 で実装する。HTTP を受けるのは `pages/` の `.server.ts` と `routes/` なので、ここには D1 と R2 の実装だけを置く
 
 Web の URL は、void が `pages/` と `routes/` の下のファイルの場所から決める。実装の入口は次のとおり。
 
