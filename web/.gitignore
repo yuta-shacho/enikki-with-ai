@@ -1,0 +1,13 @@
+node_modules
+dist
+.void
+.wrangler
+.cloudflare
+.void-wrangler.jsonc
+.env
+.env.*
+*.tsbuildinfo
+.DS_Store
+
+# Cloudflare のアカウント ID が入る。コミットするかは #13 で決める
+void.lock.json
