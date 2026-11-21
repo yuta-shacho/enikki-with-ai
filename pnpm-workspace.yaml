@@ -9,10 +9,10 @@ allowBuilds:
   void: true
   workerd: true
 overrides:
-  vite@*: npm:@voidzero-dev/vite-plus-core@^1.6.0
-peerDependencyRules:
-  allowedVersions:
-    vite: "*"
+  vite@*: "catalog:"
 permissions:
   void:
     skills: true
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@8.3.8000
+  vite-plus: 1.7.0
