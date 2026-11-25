@@ -25,7 +25,7 @@ export default defineConfig({
 - 一部のディレクトリやファイルだけに当てるルールは、`overrides` の `files` にパスを書いて分ける。パスはルートから書く（例：`web/src/server/domain/**`）
 - `web/vite.config.ts` には `lint` と `fmt` を書かない。void と React の設定だけを置く
 - Vite+ はパッケージやディレクトリの中に置いた lint と整形の設定を読まない。`web/` で `vp check` を打っても、ルートの設定が使われる
-- カスタムルールはルートの `lint/enikki.ts` に置く。置き場所は Vite+ の文書の例に合わせた。ルールは `vite-plus/lint/plugins` で書き、`lint/enikki.test.ts` で `vite-plus/lint/plugins-dev` の `RuleTester` を使ってテストする。ルートで `vp test` を打つと、このテストだけが走る（`test.include`）
+- カスタムルールはルートの `script/enikki.ts` に置く。ルールは `vite-plus/lint/plugins` で書き、`script/enikki.test.ts` で `vite-plus/lint/plugins-dev` の `RuleTester` を使ってテストする。ルートで `vp test` を打つと、このテストだけが走る（`test.include`）
 - ルートの `package.json` には `vite-plus` と `@cloudflare/oxlint-config` だけを入れ、`typescript` は入れない。入れると、プリセットが使う ESLint のプラグインが求める TypeScript（6.1 未満）と合わず、pnpm が警告を出す。ルートの型チェックは、Vite+ に入っている tsrs がする
 
 ## 2. lint のルール

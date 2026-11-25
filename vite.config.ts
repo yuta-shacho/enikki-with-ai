@@ -26,7 +26,7 @@ export default defineConfig({
     jsPlugins: [
       ...(cloudflare.jsPlugins ?? []),
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
-      { name: "enikki", specifier: "./lint/enikki.ts" },
+      { name: "enikki", specifier: "./script/enikki.ts" },
     ],
     options: { ...cloudflare.options, typeAware: true, typeCheck: true },
     rules: { ...cloudflare.rules, "vite-plus/prefer-vite-plus-imports": "error" },
@@ -94,6 +94,6 @@ export default defineConfig({
     ],
   },
   test: {
-    include: ["lint/**/*.test.ts"],
+    include: ["script/**/*.test.ts"],
   },
 });
