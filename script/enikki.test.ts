@@ -17,8 +17,16 @@ tester.run("no-ports-dir", rules["no-ports-dir"], {
     { code: "export {};", filename: `/tmp/ports/enikki/${domain}/review.ts` },
   ],
   invalid: [
-    { code: "export {};", errors: 1, filename: "web/src/server/ports/task-store.ts" },
-    { code: "export {};", errors: 1, filename: `${domain}/port/task-store.ts` },
+    {
+      code: "export {};",
+      errors: [{ messageId: "noPortsDir" }],
+      filename: "web/src/server/ports/task-store.ts",
+    },
+    {
+      code: "export {};",
+      errors: [{ messageId: "noPortsDir" }],
+      filename: `${domain}/port/task-store.ts`,
+    },
   ],
 });
 
@@ -28,9 +36,21 @@ tester.run("no-catch-all-file", rules["no-catch-all-file"], {
     { code: "export {};", filename: `${domain}/task-types.ts` },
   ],
   invalid: [
-    { code: "export {};", errors: 1, filename: `${domain}/types.ts` },
-    { code: "export {};", errors: 1, filename: `${domain}/models.ts` },
-    { code: "export {};", errors: 1, filename: "web/src/server/domain.ts" },
+    {
+      code: "export {};",
+      errors: [{ messageId: "noCatchAllFile" }],
+      filename: `${domain}/types.ts`,
+    },
+    {
+      code: "export {};",
+      errors: [{ messageId: "noCatchAllFile" }],
+      filename: `${domain}/models.ts`,
+    },
+    {
+      code: "export {};",
+      errors: [{ messageId: "noCatchAllFile" }],
+      filename: "web/src/server/domain.ts",
+    },
   ],
 });
 
@@ -43,10 +63,14 @@ tester.run("index-reexport-only", rules["index-reexport-only"], {
     { code: "export const a = 1;", filename: `${domain}/task.ts` },
   ],
   invalid: [
-    { code: "export const a = 1;", errors: 1, filename: `${domain}/index.ts` },
+    {
+      code: "export const a = 1;",
+      errors: [{ messageId: "indexReexportOnly" }],
+      filename: `${domain}/index.ts`,
+    },
     {
       code: 'import { Task } from "./task.ts";\nexport { Task };',
-      errors: 2,
+      errors: [{ messageId: "indexReexportOnly" }, { messageId: "indexReexportOnly" }],
       filename: `${domain}/index.ts`,
     },
   ],
@@ -55,7 +79,11 @@ tester.run("index-reexport-only", rules["index-reexport-only"], {
 tester.run("no-class", rules["no-class"], {
   valid: [{ code: "type Task = Readonly<{ kind: 'Todo' }>;", filename: `${domain}/task.ts` }],
   invalid: [
-    { code: "class Task {}", errors: 1, filename: `${domain}/task.ts` },
-    { code: "const Task = class {};", errors: 1, filename: `${domain}/task.ts` },
+    { code: "class Task {}", errors: [{ messageId: "noClass" }], filename: `${domain}/task.ts` },
+    {
+      code: "const Task = class {};",
+      errors: [{ messageId: "noClass" }],
+      filename: `${domain}/task.ts`,
+    },
   ],
 });
