@@ -37,7 +37,7 @@ export default defineConfig({
 - バージョンは `0.1.0` に固定し、`^` を付けない。2026-11-20 に公開されたばかりで、これからルールが変わりやすいためだ
 - プリセットの `rules` と `overrides` は、展開してから書き足す。展開せずに書くと、プリセットの設定が消える
 - 型の情報を使う検査（`typeAware`）と型チェック（`typeCheck`）を、どちらも有効にする。プリセットには、型の情報を使うルールが入っている。また、`vp check` で型チェックもすることは、[開発環境と起動手順](dev-environment.md) の4章で決めてある
-- プリセットは oxlint `^1.94.0` を求める。そのため、Vite+ を 1.7.0 に上げた（#38）。1.7.0 には oxlint 1.94.0 が入っている
+- プリセットは oxlint `^1.94.0` を求める。そのため、Vite+ を 1.8.0 に上げた（#38）。1.8.0 には oxlint 1.94.0 が入っている
 - プリセットは、oxlint が既定で有効にする correctness のカテゴリを切り（`categories: { correctness: "off" }`）、使うルールを1つずつ有効にしている。`no-unused-vars`、`no-undef`、`no-unreachable` などの correctness のルールも、この中で有効にしている。この方針をそのまま受け入れる。oxlint を上げても、カテゴリに足されたルールが知らないうちに有効にならず、検査の結果が変わりにくいためだ
 - プリセットは、`no-console` をすべてのファイルで `error` にしている。要らなくなったルールの無効化コメントも、`reportUnusedDisableDirectives` で `error` にしている
 - `vp migrate` が入れた `vite-plus/prefer-vite-plus-imports` も残す。`vite` や oxlint ではなく `vite-plus` から import するよう求めるルールだ
