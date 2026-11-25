@@ -11,7 +11,11 @@ const rules = plugin.rules;
 const domain = "web/src/server/domain";
 
 tester.run("no-ports-dir", rules["no-ports-dir"], {
-  valid: [{ code: "export {};", filename: `${domain}/task/task-store.ts` }],
+  valid: [
+    { code: "export {};", filename: `${domain}/task/task-store.ts` },
+    // チェックアウト先の親に ports があっても、src/server/ の中に ports がなければ通す
+    { code: "export {};", filename: `/tmp/ports/enikki/${domain}/review.ts` },
+  ],
   invalid: [
     { code: "export {};", errors: 1, filename: "web/src/server/ports/task-store.ts" },
     { code: "export {};", errors: 1, filename: `${domain}/port/task-store.ts` },

@@ -72,7 +72,10 @@ export default defineConfig({
               patterns: [
                 {
                   group: [
+                    // ../adapter のようにディレクトリを直接指すと、末尾に / がないので別に書く
+                    "**/usecase",
                     "**/usecase/**",
+                    "**/adapter",
                     "**/adapter/**",
                     "**/db/schema",
                     "**/db/schema.ts",

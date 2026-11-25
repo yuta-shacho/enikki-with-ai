@@ -2,6 +2,18 @@
 import { definePlugin, defineRule } from "vite-plus/lint/plugins";
 
 const pathSegments = (filename: string) => filename.split(/[\\/]/);
+// src/server/ より後ろのディレクトリ。チェックアウト先の親のディレクトリの名前を見ないようにする
+const serverDirectories = (filename: string) => {
+  const path = `/${filename.replaceAll("\\", "/")}`;
+  const marker = "/src/server/";
+  const start = path.lastIndexOf(marker);
+  return start === -1
+    ? []
+    : path
+        .slice(start + marker.length)
+        .split("/")
+        .slice(0, -1);
+};
 const baseName = (filename: string) => pathSegments(filename).at(-1) ?? "";
 const scriptFile = (name: string) => new RegExp(`^(?:${name})\\.[cm]?[jt]sx?$`);
 
@@ -16,7 +28,7 @@ const noPortsDir = defineRule({
   create(context) {
     return {
       Program(node) {
-        const directories = pathSegments(context.filename).slice(0, -1);
+        const directories = serverDirectories(context.filename);
         if (directories.some((directory) => directory === "port" || directory === "ports")) {
           context.report({ messageId: "noPortsDir", node });
         }
