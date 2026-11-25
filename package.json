@@ -1,5 +1,8 @@
 {
   "name": "enikki-with-ai",
   "private": true,
+  "devDependencies": {
+    "vite-plus": "catalog:"
+  },
   "packageManager": "pnpm@12.21.0"
 }

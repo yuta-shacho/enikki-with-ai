@@ -10,7 +10,7 @@
 | ------------- | ---------- | ------------------------------------------- |
 | Node.js       | 26.13.1    | `.node-version`                             |
 | pnpm          | 12.21.0    | ルートの `package.json` の `packageManager` |
-| Vite+（`vp`） | 1.6.0      | `web/package.json`                          |
+| Vite+（`vp`） | 1.8.0      | `pnpm-workspace.yaml` の `catalog`          |
 | void          | 1.9.1      | `web/package.json`                          |
 
 自分で入れるのは Vite+ だけでよい。Node.js と pnpm は、Vite+ が上のファイルを読んで自動で入れる。
@@ -118,7 +118,7 @@ void は名前が `.dev.ts` や `.dev.tsx` で終わる画面とルートを本�
 | CLI が動く Node.js は 24 以上にする                  | 22 のサポートが 2027年4月30日に終わる。24 は 2028年4月30日まで続く                                                                                               |
 | `cli/` の `@types/node` を 24 のものにする           | 開発は 26 でするので、24 にない関数を書いても手元では動く。型チェックで、書いた時点で気づけるようにする                                                          |
 | CI で CLI のテストを Node.js 24 でも動かす           | 同じ関数の動きが 24 と 26 で違うことは、型チェックでは気づけない                                                                                                 |
-| void は `^` を付けずに書き、Vite+ は `^1.6.0` のままにする | void は本番の動きを左右するので固定する。Vite+ はひな形の書き方に合わせる。実際に入るバージョンは `pnpm-lock.yaml` が決めるので、`^` が付いていても勝手には上がらない |
+| void は `^` を付けずに書き、Vite+ は `pnpm-workspace.yaml` の `catalog` に書く | void は本番の動きを左右するので固定する。Vite+ は、`vp migrate` で上げたときに書かれる形に合わせる |
 | OAuth アプリを手元用と本番用に分ける                 | GitHub の OAuth アプリには、送り返す先の URL を1つしか登録できない。分けておけば、手元の `web/.env` の値が漏れても本番のログインに関わらない                     |
 | ポートを 5173 に固定する                             | OAuth の送り返し先と `ENIKKI_API_URL` が 5173 を前提にしている                                                                                                   |
 | 過去の日付のデータは開発専用の画面から入れる         | `void db seed` は手元の D1 を空にするので、ログインで作った利用者と API キーが消える。SQL を流す方法では R2 に絵を置けない。本番を写す方法は、公開の前には使えない |
@@ -126,6 +126,12 @@ void は名前が `.dev.ts` や `.dev.tsx` で終わる画面とルートを本�
 | void の AI 向けの skill を pnpm で許可する           | `pnpm-workspace.yaml` の `permissions` に書いてある。依存を入れると、pnpm が `.claude/skills/` にリンクを作る                                                    |
 
 Node.js、pnpm、Vite+ を上げるときは、void と同じく1つの PR で上げ、5章の手順を通してからデプロイする（[システム構成](architecture.md) の6章）。
+
+Vite+ はルートで次のコマンドを打って上げる。`1.8.0` は、上げる先のバージョンに置き換える。`vite-plus` のバージョンと、`vite` の別名の先のバージョンを、migrate がまとめて書き換える。`--no-hooks` などを付けないと、git のフック、AI 向けの指示のファイル、エディタの設定まで作られる。
+
+```sh
+pnpm dlx --package=vite-plus@1.8.0 vp migrate --no-interactive --no-hooks --no-agent --no-editor
+```
 
 ## 7. git に入れないもの
 
