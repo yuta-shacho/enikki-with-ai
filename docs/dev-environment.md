@@ -10,7 +10,7 @@
 | ------------- | ---------- | ------------------------------------------- |
 | Node.js       | 26.13.1    | `.node-version`                             |
 | pnpm          | 12.21.0    | ルートの `package.json` の `packageManager` |
-| Vite+（`vp`） | 1.7.0      | `pnpm-workspace.yaml` の `catalog`          |
+| Vite+（`vp`） | 1.8.0      | `pnpm-workspace.yaml` の `catalog`          |
 | void          | 1.9.1      | `web/package.json`                          |
 
 自分で入れるのは Vite+ だけでよい。Node.js と pnpm は、Vite+ が上のファイルを読んで自動で入れる。
@@ -128,10 +128,10 @@ void は名前が `.dev.ts` や `.dev.tsx` で終わる画面とルートを本�
 
 Node.js、pnpm、Vite+ を上げるときは、void と同じく1つの PR で上げ、5章の手順を通してからデプロイする（[システム構成](architecture.md) の6章）。
 
-Vite+ はルートで次のコマンドを打って上げる。`1.7.0` は、上げる先のバージョンに置き換える。`vite-plus` のバージョンと、`vite` の別名の先のバージョンを、migrate がまとめて書き換える。`--no-hooks` などを付けないと、git のフック、AI 向けの指示のファイル、エディタの設定まで作られる。
+Vite+ はルートで次のコマンドを打って上げる。`1.8.0` は、上げる先のバージョンに置き換える。`vite-plus` のバージョンと、`vite` の別名の先のバージョンを、migrate がまとめて書き換える。`--no-hooks` などを付けないと、git のフック、AI 向けの指示のファイル、エディタの設定まで作られる。
 
 ```sh
-pnpm dlx --package=vite-plus@1.7.0 vp migrate --no-interactive --no-hooks --no-agent --no-editor
+pnpm dlx --package=vite-plus@1.8.0 vp migrate --no-interactive --no-hooks --no-agent --no-editor
 ```
 
 ## 7. git に入れないもの
