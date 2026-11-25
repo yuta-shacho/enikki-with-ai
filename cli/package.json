@@ -17,7 +17,7 @@
     "build": "vp pack",
     "dev": "vp pack --watch",
     "test": "vp test",
-    "check": "vp check",
+    "check": "vp check --deny-warnings",
     "prepublishOnly": "vp run build"
   },
   "devDependencies": {
