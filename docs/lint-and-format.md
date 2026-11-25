@@ -38,6 +38,7 @@ export default defineConfig({
 - プリセットの `rules` と `overrides` は、展開してから書き足す。展開せずに書くと、プリセットの設定が消える
 - 型の情報を使う検査（`typeAware`）と型チェック（`typeCheck`）を、どちらも有効にする。プリセットには、型の情報を使うルールが入っている。また、`vp check` で型チェックもすることは、[開発環境と起動手順](dev-environment.md) の4章で決めてある
 - プリセットは oxlint `^1.94.0` を求める。そのため、Vite+ を 1.7.0 に上げた（#38）。1.7.0 には oxlint 1.94.0 が入っている
+- プリセットは、oxlint が既定で有効にする correctness のカテゴリを切り（`categories: { correctness: "off" }`）、使うルールを1つずつ有効にしている。`no-unused-vars`、`no-undef`、`no-unreachable` などの correctness のルールも、この中で有効にしている。この方針をそのまま受け入れる。oxlint を上げても、カテゴリに足されたルールが知らないうちに有効にならず、検査の結果が変わりにくいためだ
 - プリセットは、`no-console` をすべてのファイルで `error` にしている。要らなくなったルールの無効化コメントも、`reportUnusedDisableDirectives` で `error` にしている
 - `vp migrate` が入れた `vite-plus/prefer-vite-plus-imports` も残す。`vite` や oxlint ではなく `vite-plus` から import するよう求めるルールだ
 - テストのファイルには、プリセットの設定をそのまま使う。プリセットは `*.test.*` などのファイルで、型の安全さを確かめるルールの一部を外している
@@ -146,7 +147,7 @@ Oxfmt の既定の設定を使い、import の並び替えだけを足す（`sor
 
 安全な修正だけを許す。
 
-- 使うのは `vp check --fix` と、VS Code で保存したときの修正だ。どちらも整形と安全な修正だけをする
+- 使うのは `vp check --fix` と、VS Code で手で保存したときの修正だ。どちらも整形と安全な修正だけをする
 - `--fix-suggestions` と `--fix-dangerously` は使わない。oxlint の説明では、この2つはプログラムの動きを変えることがある
 - いまある違反は、設定を入れる PR で一度に直す。いまのコードは `void init` が作った数ファイルだけだからだ。例外は2章の表のファイルだけにする
 
@@ -165,12 +166,14 @@ Oxfmt の既定の設定を使い、import の並び替えだけを足す（`sor
 
 保存したときに整形されるように、Vite+ の文書（`docs/guide/ide-integration.md`）にある設定を、そのまま2つのファイルに書く。
 
-| ファイル                  | 中身                                                          |
-| ------------------------- | ------------------------------------------------------------- |
-| `.vscode/extensions.json` | Vite Plus Extension Pack を、入れるべき拡張機能としてすすめる |
-| `.vscode/settings.json`   | 保存したときに Oxfmt で整形し、lint の安全な修正をかける      |
+| ファイル                  | 中身                                                                        |
+| ------------------------- | --------------------------------------------------------------------------- |
+| `.vscode/extensions.json` | Vite Plus Extension Pack を、入れるべき拡張機能としてすすめる               |
+| `.vscode/settings.json`   | 保存したときに Oxfmt で整形し、手で保存したときは lint の安全な修正もかける |
 
 - 保存したときの整形は TypeScript のほかに、Markdown、JSON、CSS にもかかる
+- lint の修正（`source.fixAll.oxc`）は `"explicit"` にしてあるので、手で保存したとき（⌘S）だけかかる。自動保存ではかからない
+- 整形（`editor.formatOnSave`）は、一定時間ごとの自動保存（`files.autoSave` が `"afterDelay"`）ではかからない
 - Oxfmt は一部だけの整形ができない。そのため、`editor.formatOnSaveMode` を `"file"` にして、保存のたびにファイル全体を整形する
 
 ## 8. ほかの作業に渡すこと
@@ -181,7 +184,6 @@ CI の設計（#13）
 
 テスト（#18）
 
-- カスタムルールのテストを `RuleTester` で書く
 - テストのファイルに、プリセットの設定のほかに足すルールがあるかを決める
 
 DB の設計の実装
@@ -204,4 +206,5 @@ CLI の実装
 - 2章の「ルールにしないもの」に挙げた依存の向きのルール
 - ルールを外すコメントに、ルール名と理由が書いてあるかを確かめるカスタムルール
 - `cli/` だけに当てるルール。`cli/` のコードを書き始めてから決める
+- 設定の当て方（`overrides` と組み込みのルールのオプション）を確かめる統合テスト。正しいコードを止める誤検知は、`web/src/server/` にコードができれば `vp check` で気づける。違反を通してしまう見逃しは、レビューで見つける
 - @cloudflare/oxlint-config が配る AI 向けの skill を、pnpm で許可すること。依存を入れると pnpm が許可を求めるが、許可していない
